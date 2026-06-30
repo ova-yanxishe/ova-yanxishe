@@ -1,4 +1,4 @@
-const CACHE_NAME = "ova-yanxishe-pwa-v1";
+const CACHE_NAME = "ova-yanxishe-pwa-v2";
 const APP_SHELL = [
   "./",
   "./index.html",

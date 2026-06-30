@@ -51,7 +51,6 @@ const queryResult = document.querySelector("#queryResult");
 const OWNER_WECHAT = "OVA_Yanxishe";
 let currentLang = localStorage.getItem("ova_lang") || "zh";
 let lastReport = null;
-const qinAudioState = { ctx: null, timers: [], activeKey: null };
 
 const stems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
 const branches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
@@ -271,9 +270,9 @@ const provincePlaces = Object.fromEntries([
 
 const i18n = {
   zh: {
-    heroTitle: "八字画像",
-    heroLead: "输入生辰，先看见自己。这里会从八字排盘、五行气质、体质倾向、面部气韵与日常养修方向，生成一份容易读懂的东方画像。这不是给你贴标签，而是陪你多了解自己一点。",
-    heroCta: "输入生辰，看看自己",
+    heroTitle: "东方专属画像",
+    heroLead: "输入生辰，读懂自己的专属气质与色彩。这里会从五行气质、生活节律、面部气韵与日常养修方向，生成一份容易看懂的东方美学画像。这不是给你贴标签，而是陪你更温柔地认识自己。",
+    heroCta: "获取我的专属画像",
     priceLabel: "基础排盘",
     priceFree: "免费",
     priceSub: "先看一份自己的气质轮廓",
@@ -291,12 +290,12 @@ const i18n = {
     dailyColorLabel: "今日穿搭色",
     ritualLabel: "今日旺自己",
     studyCardLabel: "五行气质学习卡",
-    studyCardHint: "适合截图保存，作为今日气质提醒。",
-    testLabel: "今日小测试",
-    testTitle: "你今天更想要哪种状态？",
-    testSteady: "稳一点",
-    testBright: "亮一点",
-    testSoft: "松一点",
+    studyCardHint: "ORIENTAL VITAL AESTHETICS · DAILY CARD",
+    testLabel: "每日测试",
+    testTitle: "今日想先看哪一签？",
+    testLove: "感情签",
+    testWealth: "财气签",
+    testHealth: "身心签",
     articleLabel: "今日养修短文",
     articleMeta: "每日自动更新，只留今日一篇。",
     oracleQuestionLabel: "今天想问什么？",
@@ -322,9 +321,9 @@ const i18n = {
     qinToneShang: "属金，传统对应肺，宜清肃、收敛。",
     qinToneYu: "属水，传统对应肾，宜沉静、入眠。",
     qinNote: "建议音量调低，睡前听 10-20 分钟即可；如果越听越精神，就换成更慢、更少起伏的曲目。",
-    qinListen: "站内试听",
-    qinSearch: "停止",
-    qinOriginalAudio: "网页内原创生成音色，不调用外部音乐资源。",
+    qinListen: "去试听",
+    qinSearch: "平台搜索",
+    qinOriginalAudio: "建议选择古琴原曲或专业演奏版本，音量放低，静听即可。",
     querySeal: "日课日历",
     queryTitle: "查询过去与未来的日子",
     queryLead: "输入或选择日期，查看当日的日柱、节气、十二值日与吉平慎分类。结果用于生活节律参考，不替代个人择日。",
@@ -385,9 +384,9 @@ const i18n = {
     selectPlaceholder: "请选择"
   },
   en: {
-    heroTitle: "Bazi Portrait",
-    heroLead: "Enter your birth details and begin by seeing yourself more clearly. This page turns your Bazi chart, Five Element temperament, constitution notes, facial presence and daily cultivation direction into an easy-to-read Eastern portrait.",
-    heroCta: "Enter Birth Details",
+    heroTitle: "Your Eastern Portrait",
+    heroLead: "Enter your birth details to read your personal temperament and color direction. This page turns Five Element temperament, daily rhythm, facial presence and lifestyle cultivation into an easy-to-read Eastern aesthetic portrait.",
+    heroCta: "Get My Portrait",
     priceLabel: "Basic Chart",
     priceFree: "Free",
     priceSub: "Start with your temperament outline",
@@ -405,12 +404,12 @@ const i18n = {
     dailyColorLabel: "Today's Colors",
     ritualLabel: "Today's Small Practice",
     studyCardLabel: "Five Element Temperament Card",
-    studyCardHint: "Screenshot it as today's temperament reminder.",
-    testLabel: "Daily Check-in",
-    testTitle: "What state do you want today?",
-    testSteady: "Steadier",
-    testBright: "Brighter",
-    testSoft: "Softer",
+    studyCardHint: "ORIENTAL VITAL AESTHETICS · DAILY CARD",
+    testLabel: "Daily Reading",
+    testTitle: "Which note do you want today?",
+    testLove: "Love",
+    testWealth: "Wealth",
+    testHealth: "Wellbeing",
     articleLabel: "Daily Cultivation Note",
     articleMeta: "Updates daily and only shows today's note.",
     oracleQuestionLabel: "What do you want to ask today?",
@@ -436,9 +435,9 @@ const i18n = {
     qinToneShang: "Metal tone, traditionally linked with Lung; for clarity and release.",
     qinToneYu: "Water tone, traditionally linked with Kidney; for quietness and sleep.",
     qinNote: "Keep the volume low. Before sleep, 10-20 minutes is enough; if a piece wakes you up, choose a slower and sparser version.",
-    qinListen: "Play here",
-    qinSearch: "Stop",
-    qinOriginalAudio: "Original in-page generated tones; no external music resource is used.",
+    qinListen: "Listen",
+    qinSearch: "Search",
+    qinOriginalAudio: "Choose original guqin or professional performance versions, keep volume low and listen gently.",
     querySeal: "Almanac",
     queryTitle: "Look Up Any Date",
     queryLead: "Enter or pick a date to view its Day Pillar, solar term, Twelve Officer and auspicious/neutral/cautious classification. For lifestyle rhythm reference only.",
@@ -1028,14 +1027,50 @@ const studyCards = {
 
 const dailyTestCopy = {
   zh: {
-    steady: "今天先把一件小事做完整。稳定不是慢，而是让自己重新有掌控感。",
-    bright: "今天给自己一个温柔的亮点。让别人看见你，不等于消耗你。",
-    soft: "今天先松开身体，再处理事情。很多烦躁，其实从肩颈和呼吸开始。"
+    love: {
+      wood: "签文：春风入院，先暖其心。解签：关系今日宜柔和表达，不必急着证明谁对谁错。若你愿意把自己的生辰、相处状态与当下困惑一起整理，可以添加颜习社微信，做一次更贴近你的关系气质梳理。",
+      fire: "签文：灯火可亲，不宜太炽。解签：今天适合主动一点，但热情要有分寸。真正让关系变好的，不是用力追问，而是让对方感到清楚与安定。",
+      earth: "签文：厚土载花，慢处有情。解签：关系今日看行动，不看空话。一个实际的小照顾，比反复确认更能让心安下来。",
+      metal: "签文：玉有边界，光才清明。解签：今天适合把不舒服说清楚。温和的边界不是冷漠，是让关系有继续变好的空间。",
+      water: "签文：水静见月，心定见人。解签：今天不急着给答案。先看对方行动，也看自己真实感受，关系会更清楚。"
+    },
+    wealth: {
+      wood: "签文：先种一枝，后见满庭。解签：今日财气来自价值被看懂。整理一个案例、发一条内容、联系一个老客户，都会比空想更有效。",
+      fire: "签文：有光则见，有度则久。解签：今天适合展示自己，但报价与边界要讲清楚。被看见只是第一步，能成交靠的是信任感。",
+      earth: "签文：仓廪先实，交易自稳。解签：今日适合把一个小服务讲明白。少承诺，多落地，反而更容易让人愿意付费。",
+      metal: "签文：去繁取精，财路自清。解签：今日财气在筛选。拒绝低价消耗，留下真正匹配的人，才是守住正财。",
+      water: "签文：深水不响，暗藏其源。解签：今天适合研究客户真正想要什么。先洞察，再开口，成交会更自然。"
+    },
+    health: {
+      wood: "签文：枝舒则气顺。解签：今天先看肩颈、眼睛和情绪是否憋住。舒展身体，比硬撑更能养气色。",
+      fire: "签文：火明不燥，神自有光。解签：今天注意少熬夜、少急躁。气色要靠稳定的热量，不靠一时兴奋。",
+      earth: "签文：中土安，四时顺。解签：今天先照顾脾胃和节律，少冰甜，吃一顿热饭。身体稳了，脸也会显得更稳。",
+      metal: "签文：清气入肺，杂念可收。解签：今天适合做减法：少刷屏、深呼吸、整理空间。清爽感会回到脸上。",
+      water: "签文：静水养根，夜深归藏。解签：今天最该照顾睡眠和恢复。早点收手机，让身体知道可以休息了。"
+    }
   },
   en: {
-    steady: "Complete one small thing today. Steadiness is not slowness; it returns control.",
-    bright: "Give yourself one gentle highlight. Being seen does not have to drain you.",
-    soft: "Soften the body before handling the day. Much restlessness begins in breath and shoulders."
+    love: {
+      wood: "Reading: Spring wind enters softly. Interpretation: express needs gently today. If you want to connect your birth profile with current relationship patterns, add Yanxishe on WeChat for a closer personal reading.",
+      fire: "Reading: A lamp is warm when not too bright. Interpretation: be active, but keep proportion. Clarity creates safety.",
+      earth: "Reading: Flowers need steady soil. Interpretation: action matters more than repeated reassurance today.",
+      metal: "Reading: Jade shines through clear edges. Interpretation: a gentle boundary can make the relationship cleaner.",
+      water: "Reading: Still water sees the moon. Interpretation: wait, observe actions and listen to your own feeling."
+    },
+    wealth: {
+      wood: "Reading: Plant one branch first. Interpretation: money improves when your value is understood. Share a case, post content or contact an old client.",
+      fire: "Reading: Light needs measure to last. Interpretation: show yourself, but keep offer and boundary clear.",
+      earth: "Reading: A full storehouse makes stable trade. Interpretation: explain one small service clearly; grounded offers convert better.",
+      metal: "Reading: Remove excess and the path clears. Interpretation: filtering low-value drain protects real income.",
+      water: "Reading: Deep water holds its source. Interpretation: study client needs first; the ask will feel more natural."
+    },
+    health: {
+      wood: "Reading: When branches open, breath moves. Interpretation: care for neck, eyes and suppressed emotion today.",
+      fire: "Reading: Fire should be bright, not dry. Interpretation: reduce late nights and urgency; stable warmth restores complexion.",
+      earth: "Reading: When the center is steady, seasons align. Interpretation: support digestion and rhythm with warm food.",
+      metal: "Reading: Clear breath gathers the mind. Interpretation: reduce screen noise, breathe deeply and clear space.",
+      water: "Reading: Quiet water nourishes roots. Interpretation: protect sleep and recovery; put the phone down earlier."
+    }
   }
 };
 
@@ -1156,6 +1191,85 @@ const oracleCopy = {
       metal: "Mindset today starts with selection. Remove one unnecessary commitment and energy returns.",
       water: "Mindset today starts with rest. It is not retreat; it clears judgment."
     }
+  }
+};
+
+const dailyReadingAddons = {
+  zh: {
+    wealth: [
+      "今日更适合先整理一个能被人看懂的价值点，再谈价格。把话说清楚，财气才容易落地。",
+      "今天不宜贪多，先把一个小服务、小作品或一个旧客户跟进到底，回款感会更稳。",
+      "若要谈合作，先讲边界与交付，不急着给优惠。清楚，比热情更能让人放心。",
+      "今日适合做复盘：谁真正需要你、谁只是在消耗你。筛选之后，才有真正的正向流动。"
+    ],
+    career: [
+      "今天适合把方向写下来，再拆成一个能马上完成的小动作。事情先动起来，气才会接上。",
+      "今日适合沟通、约见、递作品，但表达要留余地。过满的话，反而压住后续空间。",
+      "今天适合修流程、定报价、整理案例。专业感不是说得多，而是让别人一眼看见你的秩序。",
+      "今日不必急着证明自己，先把最强的一项能力摆出来。主线清楚，别人更容易信任你。"
+    ],
+    love: [
+      "今天关系里最重要的是“说清楚，但不逼迫”。温和表达，比反复试探更有力量。",
+      "今日适合观察对方是否有行动，不要只被情绪和承诺带走。真正稳定的关系，会让人心里有底。",
+      "如果心里有委屈，先把感受整理成一句能被听懂的话。表达不是争输赢，是让关系有路可走。",
+      "今日不宜把所有注意力都放在对方身上。先把自己安顿好，关系才不会失衡。"
+    ],
+    beauty: [
+      "今天的美感重点在“干净的气色”。少一点杂乱，多一点舒展，脸上的神会自然出来。",
+      "今日穿搭不求复杂，求一个让你显得精神的焦点：领口、发型、唇色或一件干净外套。",
+      "今天适合让身体先松开。肩颈一松，眼神和脸部线条都会更柔和。",
+      "今日美感宜留白，颜色不要堆太满。越轻、越清、越有余地，越显气质。"
+    ],
+    calm: [
+      "今天先别急着给人生下结论。把眼前一件小事做好，心会慢慢回到自己身上。",
+      "今日适合少刷一点信息，多听身体的声音。真正的清醒，常常从安静开始。",
+      "如果觉得乱，先整理一个角落、一张桌子或一段待办。外在秩序会把心神慢慢带回来。",
+      "今天把标准放低一点，把呼吸放慢一点。能稳住自己，就是一种很重要的进步。"
+    ],
+    health: [
+      "今天先照顾睡眠、饮水和肩颈。身体松一点，脸上的紧张感也会少一点。",
+      "今日不做医疗判断，只提醒你观察身体信号：疲惫、焦躁、眼干、胃口，都是需要被照顾的语言。",
+      "今天适合热食、慢走、少冰冷。让身体有温度，人也会显得更安稳。",
+      "若状态不好，先减少消耗。少一点熬夜和硬撑，比临时补救更有用。"
+    ]
+  },
+  en: {
+    wealth: [
+      "Today favors making one value point easy to understand before discussing price. Clarity helps money land.",
+      "Do not chase too many directions. Complete one small offer, one case or one client follow-up first.",
+      "When discussing cooperation, clarify boundary and delivery before discount. Trust grows from order.",
+      "Review who truly needs your work and who only drains you. Filtering creates healthier flow."
+    ],
+    career: [
+      "Write the direction down, then turn it into one immediate action. Momentum begins with movement.",
+      "Meetings, messages and portfolios are useful today, but leave space in your expression.",
+      "Refine workflow, pricing and cases. Professionalism is often visible order.",
+      "You do not need to prove everything. Show the strongest line clearly and trust becomes easier."
+    ],
+    love: [
+      "Say things clearly without forcing. Gentle clarity is stronger than repeated testing.",
+      "Observe actions, not only emotions or promises. A stable bond gives the heart ground.",
+      "Turn hurt into one sentence that can be heard. Expression is not winning; it opens a path.",
+      "Do not place all attention on the other person. Settle yourself first so the bond does not tilt."
+    ],
+    beauty: [
+      "Today's beauty begins with clean complexion and ease. Less clutter, more openness.",
+      "Choose one focal point: neckline, hair, lip color or a clean jacket.",
+      "Let the body soften first. When neck and shoulders relax, the eyes and face soften too.",
+      "Leave visual space. Lighter, cleaner and more breathable styling creates presence."
+    ],
+    calm: [
+      "Do not define your whole life today. Finish one small thing and attention returns.",
+      "Scroll less and listen to the body more. Clarity often begins in quiet.",
+      "If the mind feels scattered, clear one corner, one desk or one list.",
+      "Lower the standard and slow the breath. Stabilizing yourself is real progress."
+    ],
+    health: [
+      "Care first for sleep, water and neck tension. A softer body makes the face less tense.",
+      "This is not medical advice; simply observe fatigue, dryness, appetite and irritability as signals.",
+      "Warm food, slow walking and less cold intake can support a steadier state today.",
+      "If energy is low, reduce depletion first. Less forcing is better than late repair."
+    ]
   }
 };
 
@@ -1474,6 +1588,20 @@ function pickDaily(list, offset = 0) {
   return list[(daySeed() + offset) % list.length];
 }
 
+function stringSeed(value = "") {
+  return Array.from(value).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+}
+
+function pickDailyByContext(list, topic = "", offset = 0, date = new Date()) {
+  if (!list?.length) return "";
+  const dayPillar = getDayPillar(date);
+  const stemIndex = stems.indexOf(dayPillar[0]);
+  const branchIndex = branches.indexOf(dayPillar[1]);
+  const officer = getTwelveOfficer(date);
+  const seed = daySeed(date) + stringSeed(topic) + (stemIndex + 1) * 7 + (branchIndex + 1) * 11 + stringSeed(officer.key) + offset;
+  return list[((seed % list.length) + list.length) % list.length];
+}
+
 function getDailyElement() {
   const today = new Date();
   const dayPillar = getDayPillar(today);
@@ -1561,8 +1689,8 @@ function renderDailyRetention(element) {
   const study = studyCards[lang][element];
   const article = pickDaily(dailyArticles, 13);
   const cta = lang === "zh"
-    ? `如果你想把今日建议与你的生辰、气色、体态和穿搭方向合在一起细看，可添加颜习社微信 ${OWNER_WECHAT}。`
-    : `If you want to connect today's note with your birth profile, complexion, posture and style direction, add Yanxishe on WeChat: ${OWNER_WECHAT}.`;
+    ? `如果你读到这里，感觉有些地方正好说中自己的状态，可以先保存页面，再添加颜习社微信 ${OWNER_WECHAT}。我会根据你的资料，帮你把气质、色彩、体态和近期状态整理成更清楚的一条线。`
+    : `If this note feels close to your current state, save the page and add Yanxishe on WeChat: ${OWNER_WECHAT}. I can help connect your temperament, colors, posture and current rhythm into a clearer personal line.`;
 
   if (dailyRitualTitle) dailyRitualTitle.textContent = ritual.title;
   if (dailyRitualText) dailyRitualText.textContent = ritual.text;
@@ -1582,9 +1710,31 @@ function renderDailyRetention(element) {
   if (dailyArticleCta) dailyArticleCta.textContent = cta;
   if (dailyTestResult) {
     dailyTestResult.textContent = lang === "zh"
-      ? "选一个今天最想靠近的状态。"
-      : "Choose the state you want to move toward today.";
+      ? "心里先默念一个问题，再抽一支今日签。"
+      : "Hold one quiet question, then draw today's note.";
   }
+}
+
+function buildDailyReading(topic, mode = "test") {
+  const date = new Date();
+  const lang = currentLang;
+  const element = getDailyElement();
+  const dayPillar = getDayPillar(date);
+  const officer = getTwelveOfficer(date);
+  const officerItem = officerCopy[lang][officer.key];
+  const solar = getCurrentSolarTerm(date);
+  const solarName = lang === "zh" ? solar.current.zh : solar.current.en;
+  const topicCopy = mode === "oracle" ? oracleCopy[lang][topic] : dailyTestCopy[lang][topic];
+  const base = topicCopy?.[element] || "";
+  const addonTopic = dailyReadingAddons[lang][topic] ? topic : "calm";
+  const addon = pickDailyByContext(dailyReadingAddons[lang][addonTopic], topic, mode === "oracle" ? 37 : 19, date);
+
+  if (lang === "zh") {
+    const officerName = `${officer.zh}日`;
+    return `${base}\n\n今日为${dayPillar}日，值${officerName}，属${officerItem.grade}。${solarName}气中，宜顺势而行：${addon}`;
+  }
+
+  return `${base}\n\nToday is a ${dayPillar} day, with ${officer.en} as the daily officer (${officerItem.grade}). Under ${solarName}, move with the day: ${addon}`;
 }
 
 function renderDaily() {
@@ -1632,16 +1782,13 @@ function renderDaily() {
 }
 
 function drawOracle() {
-  const element = getDailyElement();
   const topic = oracleTopic.value || "wealth";
-  const text = oracleCopy[currentLang][topic][element];
   const prefix = currentLang === "zh" ? "今日提示：" : "Today's note: ";
-  oracleResult.textContent = `${prefix}${text}`;
+  oracleResult.textContent = `${prefix}${buildDailyReading(topic, "oracle")}`;
 }
 
 function renderQin() {
   if (!qinMode || !qinResult || !qinTrackList) return;
-  stopQinAudio(false);
   const mode = qinModes[qinMode.value] || qinModes.sleep;
   qinResult.textContent = mode[currentLang];
   qinTrackList.innerHTML = mode.tracks.map((trackKey) => {
@@ -1649,6 +1796,8 @@ function renderQin() {
     const title = currentLang === "zh" ? track.zhTitle : track.enTitle;
     const organ = currentLang === "zh" ? track.organZh : track.organEn;
     const use = currentLang === "zh" ? track.zhUse : track.enUse;
+    const bilibiliUrl = `https://search.bilibili.com/all?keyword=${encodeURIComponent(track.query)}`;
+    const neteaseUrl = `https://music.163.com/#/search/m/?s=${encodeURIComponent(track.query)}`;
     return `
       <article class="qin-track">
         <div>
@@ -1659,74 +1808,17 @@ function renderQin() {
         <p>${use}</p>
         <small class="qin-audio-note">${label("qinOriginalAudio")}</small>
         <nav>
-          <button class="qin-play" type="button" data-track="${trackKey}">${label("qinListen")}</button>
-          <button class="qin-stop" type="button">${label("qinSearch")}</button>
+          <a href="${bilibiliUrl}" target="_blank" rel="noopener">${label("qinListen")}</a>
+          <a href="${neteaseUrl}" target="_blank" rel="noopener">${label("qinSearch")}</a>
         </nav>
       </article>
     `;
   }).join("");
 }
 
-function getQinContext() {
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContextClass) return null;
-  if (!qinAudioState.ctx) qinAudioState.ctx = new AudioContextClass();
-  return qinAudioState.ctx;
-}
-
-function stopQinAudio(updateButtons = true) {
-  qinAudioState.timers.forEach((timer) => clearTimeout(timer));
-  qinAudioState.timers = [];
-  qinAudioState.activeKey = null;
-  if (updateButtons && qinTrackList) {
-    qinTrackList.querySelectorAll(".qin-play").forEach((button) => {
-      button.classList.remove("is-playing");
-      button.textContent = label("qinListen");
-    });
-  }
-}
-
-function playPluck(ctx, frequency, start, length = 2.8, volume = 0.09) {
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  const filter = ctx.createBiquadFilter();
-  osc.type = "triangle";
-  osc.frequency.setValueAtTime(frequency, start);
-  filter.type = "lowpass";
-  filter.frequency.setValueAtTime(980, start);
-  gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.exponentialRampToValueAtTime(volume, start + 0.04);
-  gain.gain.exponentialRampToValueAtTime(0.0001, start + length);
-  osc.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(start);
-  osc.stop(start + length + 0.08);
-}
-
-function playQinTrack(trackKey, button) {
-  const ctx = getQinContext();
-  if (!ctx) return;
-  stopQinAudio();
-  const track = qinTracks[trackKey];
-  const toneBase = { 角: 392, 徵: 523.25, 宫: 329.63, 商: 440, 羽: 293.66 };
-  const base = toneBase[track.tone] || 329.63;
-  const ratios = [1, 1.125, 1.25, 1.5, 1.333, 1.25, 1.125, 1];
-  const startAt = ctx.currentTime + 0.08;
-  ratios.forEach((ratio, index) => {
-    playPluck(ctx, base * ratio, startAt + index * 2.25, index % 3 === 0 ? 3.4 : 2.6, index === 0 ? 0.08 : 0.055);
-  });
-  qinAudioState.activeKey = trackKey;
-  if (button) {
-    button.classList.add("is-playing");
-    button.textContent = currentLang === "zh" ? "正在听" : "Playing";
-  }
-  qinAudioState.timers.push(setTimeout(() => stopQinAudio(), 20500));
-}
-
 function applyLanguage() {
   document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
-  document.title = currentLang === "zh" ? "东方颜习社｜八字画像" : "Oriental Vital Aesthetics | Bazi Portrait";
+  document.title = currentLang === "zh" ? "东方颜习社｜东方专属画像" : "Oriental Vital Aesthetics | Personal Eastern Portrait";
   langToggle.textContent = currentLang === "zh" ? "EN" : "中";
   document.querySelectorAll("[data-i18n]").forEach((node) => {
     const key = node.dataset.i18n;
@@ -2637,24 +2729,10 @@ qinMode.addEventListener("change", renderQin);
 document.querySelectorAll("[data-test]").forEach((button) => {
   button.addEventListener("click", () => {
     const key = button.dataset.test;
-    const element = getDailyElement();
-    const prefix = currentLang === "zh"
-      ? `今日${elementHan[element]}气提示：`
-      : `Today's ${elementEn[element]} note: `;
-    dailyTestResult.textContent = `${prefix}${dailyTestCopy[currentLang][key]}`;
+    const prefix = currentLang === "zh" ? "今日签：" : "Today's reading: ";
+    dailyTestResult.textContent = `${prefix}${buildDailyReading(key, "test")}`;
   });
 });
-qinTrackList.addEventListener("click", (event) => {
-  const playButton = event.target.closest(".qin-play");
-  const stopButton = event.target.closest(".qin-stop");
-  if (playButton) {
-    playQinTrack(playButton.dataset.track, playButton);
-  }
-  if (stopButton) {
-    stopQinAudio();
-  }
-});
-window.addEventListener("beforeunload", () => stopQinAudio(false));
 
 langToggle.addEventListener("click", () => {
   currentLang = currentLang === "zh" ? "en" : "zh";

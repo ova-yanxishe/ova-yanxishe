@@ -698,6 +698,7 @@ h3 {
   min-height: 50px;
   padding-top: 8px;
   border-top: 1px solid rgba(92, 73, 50, 0.12);
+  white-space: pre-line;
 }
 
 .daily-article-card {
@@ -771,6 +772,7 @@ h3 {
   border-radius: 4px;
   background: rgba(255, 253, 247, 0.42);
   line-height: 1.7;
+  white-space: pre-line;
 }
 
 .almanac-query {

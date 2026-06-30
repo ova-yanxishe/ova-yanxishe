@@ -1,7 +1,7 @@
 {
   "name": "东方颜习社",
   "short_name": "颜习社",
-  "description": "五行气质、八字画像、每日黄历与生活美学小课。",
+  "description": "五行气质、东方专属画像、每日黄历与生活美学小课。",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
