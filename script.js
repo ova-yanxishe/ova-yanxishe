@@ -293,6 +293,7 @@ const i18n = {
     studyCardHint: "ORIENTAL VITAL AESTHETICS · DAILY CARD",
     testLabel: "每日测试",
     testTitle: "今日想先看哪一签？",
+    testQuietNote: "抽签前，先深呼吸三次，让心安静下来。心头无事不起念，起念再看今日提示。",
     testLove: "感情签",
     testWealth: "财气签",
     testHealth: "身心签",
@@ -407,6 +408,7 @@ const i18n = {
     studyCardHint: "ORIENTAL VITAL AESTHETICS · DAILY CARD",
     testLabel: "Daily Reading",
     testTitle: "Which note do you want today?",
+    testQuietNote: "Before drawing, take three quiet breaths. Ask only when the heart has a real question.",
     testLove: "Love",
     testWealth: "Wealth",
     testHealth: "Wellbeing",
@@ -1292,20 +1294,48 @@ const topicNames = {
   }
 };
 
+const timeBranchNames = {
+  zh: {
+    子: "子时", 丑: "丑时", 寅: "寅时", 卯: "卯时", 辰: "辰时", 巳: "巳时",
+    午: "午时", 未: "未时", 申: "申时", 酉: "酉时", 戌: "戌时", 亥: "亥时"
+  },
+  en: {
+    子: "Zi hour", 丑: "Chou hour", 寅: "Yin hour", 卯: "Mao hour", 辰: "Chen hour", 巳: "Si hour",
+    午: "Wu hour", 未: "Wei hour", 申: "Shen hour", 酉: "You hour", 戌: "Xu hour", 亥: "Hai hour"
+  }
+};
+
+const timeRhythmCopy = {
+  zh: [
+    "此刻宜先收心，再行动。让呼吸慢一点，判断会更清楚。",
+    "此刻适合轻一点表达，少一点解释，把状态留得干净。",
+    "此刻适合做一个小整理：发型、衣领、桌面或一句要说的话。",
+    "此刻不宜急着求结果，先确认自己真正想要的方向。",
+    "此刻适合把外在形象和内在节奏对齐，越简洁越有力量。"
+  ],
+  en: [
+    "This moment favors settling before action. Slower breath makes judgment clearer.",
+    "This moment favors lighter expression and less over-explaining.",
+    "This moment favors one small refinement: hair, collar, desk or one sentence.",
+    "Do not rush for a result. First confirm the direction you truly want.",
+    "Align outer image with inner rhythm. Simplicity carries strength."
+  ]
+};
+
 const officerReadingFrame = {
   zh: {
-    jian: "逢建日，重在起势。今天不求马上见结果，先把一个方向立起来，做一个可执行的小开始。",
-    chu: "逢除日，重在去旧。今天适合清掉消耗、误会和多余负担，状态越干净，后面的路越顺。",
-    man: "逢满日，重在收纳与滋养。今天适合补资源、补气色、补关系里的温度，但不要让承诺过满。",
-    ping: "逢平日，重在调和。今天不宜硬冲，适合把节奏放平，把话说稳，把关系和选择重新摆正。",
-    ding: "逢定日，重在落位。今天适合确定一个小决定、一个安排或一条边界，让心里更有秩序。",
-    zhi: "逢执日，重在跟进。今天适合把手里的事继续推进，但要记得用力有度，不要把坚持变成拧巴。",
-    po: "逢破日，重在止损。今天适合看见问题、拆掉旧模式，不宜冲动加码或强求圆满。",
-    wei: "逢危日，重在谨慎。今天先稳住身体和判断，重要选择多复核一步，不必急着证明自己。",
-    cheng: "逢成日，重在完成。今天适合把准备好的事推出去、说出口、交付出去，让成果被看见。",
-    shou: "逢收日，重在聚气。今天适合回收注意力、整理资料、收款复盘，把散开的能量收回来。",
-    kai: "逢开日，重在打开。今天适合发布、邀约、表达和展示，让你的能力与气质被合适的人看见。",
-    bi: "逢闭日，重在藏养。今天适合休息、内修、整理后台，不必强行外放，留白也是一种推进。"
+    jian: "重在起势。不求马上见结果，先把一个方向立起来，做一个可执行的小开始。",
+    chu: "重在去旧。适合清掉消耗、误会和多余负担，状态越干净，后面的路越顺。",
+    man: "重在收纳与滋养。适合补资源、补气色、补关系里的温度，但不要让承诺过满。",
+    ping: "重在调和。不宜硬冲，适合把节奏放平，把话说稳，把关系和选择重新摆正。",
+    ding: "重在落位。适合确定一个小决定、一个安排或一条边界，让心里更有秩序。",
+    zhi: "重在跟进。适合把手里的事继续推进，但要记得用力有度，不要把坚持变成拧巴。",
+    po: "重在止损。适合看见问题、拆掉旧模式，不宜冲动加码或强求圆满。",
+    wei: "重在谨慎。先稳住身体和判断，重要选择多复核一步，不必急着证明自己。",
+    cheng: "重在完成。适合把准备好的事推出去、说出口、交付出去，让成果被看见。",
+    shou: "重在聚气。适合回收注意力、整理资料、收款复盘，把散开的能量收回来。",
+    kai: "重在打开。适合发布、邀约、表达和展示，让你的能力与气质被合适的人看见。",
+    bi: "重在藏养。适合休息、内修、整理后台，不必强行外放，留白也是一种推进。"
   },
   en: {
     jian: "On an Establish day, begin. Do not force results; set one clear direction and take one executable step.",
@@ -1327,9 +1357,17 @@ function buildOfficerBaseReading(topic, officer, lang) {
   const name = topicNames[lang]?.[topic] || topicNames[lang]?.calm || topic;
   const frame = officerReadingFrame[lang]?.[officer.key] || "";
   if (lang === "zh") {
-    return `${name}今日看${officer.zh}日：${frame}`;
+    return `${name}签：今日值${officer.zh}，${frame}`;
   }
   return `Today's ${name} follows ${officer.en}: ${frame}`;
+}
+
+function buildReadingCta(topic, lang) {
+  const name = topicNames[lang]?.[topic] || topicNames[lang]?.calm || topic;
+  if (lang === "zh") {
+    return `如果你想把这条${name}提示，进一步落到自己的出生资料、近期状态和气质色彩里，可以添加颜习社微信 ${OWNER_WECHAT}，我会帮你做更贴近个人的梳理。`;
+  }
+  return `If you want to connect this ${name} note with your birth profile, current state and personal colors, add Yanxishe on WeChat: ${OWNER_WECHAT}.`;
 }
 
 const dailyVerses = [
@@ -1661,6 +1699,20 @@ function pickDailyByContext(list, topic = "", offset = 0, date = new Date()) {
   return list[((seed % list.length) + list.length) % list.length];
 }
 
+function getTimeBranch(date = new Date()) {
+  const hour = date.getHours();
+  const index = Math.floor(((hour + 1) % 24) / 2);
+  return branches[index];
+}
+
+function pickReadingVariant(list, topic = "", offset = 0, date = new Date()) {
+  if (!list?.length) return "";
+  const timeBranch = getTimeBranch(date);
+  const randomPart = Math.floor(Math.random() * 100000);
+  const seed = daySeed(date) + date.getHours() * 101 + stringSeed(timeBranch) + stringSeed(topic) + offset + randomPart;
+  return list[((seed % list.length) + list.length) % list.length];
+}
+
 function getDailyElement() {
   const today = new Date();
   const dayPillar = getDayPillar(today);
@@ -1769,8 +1821,8 @@ function renderDailyRetention(element) {
   if (dailyArticleCta) dailyArticleCta.textContent = cta;
   if (dailyTestResult) {
     dailyTestResult.textContent = lang === "zh"
-      ? "心里先默念一个问题，再抽一支今日签。"
-      : "Hold one quiet question, then draw today's note.";
+      ? "先深呼吸，让心安静下来。若心里有一个真正想看的问题，再抽一支今日签。"
+      : "Take a quiet breath first. If the heart has a real question, draw today's note.";
   }
 }
 
@@ -1785,14 +1837,17 @@ function buildDailyReading(topic, mode = "test") {
   const solarName = lang === "zh" ? solar.current.zh : solar.current.en;
   const officerBase = buildOfficerBaseReading(topic, officer, lang);
   const addonTopic = dailyReadingAddons[lang][topic] ? topic : "calm";
-  const addon = pickDailyByContext(dailyReadingAddons[lang][addonTopic], topic, mode === "oracle" ? 37 : 19, date);
+  const addon = pickReadingVariant(dailyReadingAddons[lang][addonTopic], topic, mode === "oracle" ? 37 : 19, date);
+  const timeBranch = getTimeBranch(date);
+  const timeName = timeBranchNames[lang][timeBranch];
+  const timeNote = pickReadingVariant(timeRhythmCopy[lang], `${topic}-${timeBranch}`, mode === "oracle" ? 61 : 43, date);
+  const cta = buildReadingCta(topic, lang);
 
   if (lang === "zh") {
-    const officerName = `${officer.zh}日`;
-    return `${officerBase}\n\n今日为${dayPillar}日，值${officerName}，属${officerItem.grade}。${solarName}气中，宜顺势而行：${addon}`;
+    return `${officerBase}\n\n今日气象：${dayPillar}日，属${officerItem.grade}。${solarName}气中，宜顺势而行：${addon}\n\n${timeName}提示：${timeNote}\n\n${cta}`;
   }
 
-  return `${officerBase}\n\nToday is a ${dayPillar} day, with ${officer.en} as the daily officer (${officerItem.grade}). Under ${solarName}, move with the day: ${addon}`;
+  return `${officerBase}\n\nDaily note: ${dayPillar} day, ${officerItem.grade}. Under ${solarName}, move with the day: ${addon}\n\n${timeName} note: ${timeNote}\n\n${cta}`;
 }
 
 function renderDaily() {

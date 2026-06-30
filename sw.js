@@ -1,9 +1,9 @@
-const CACHE_NAME = "ova-yanxishe-pwa-v20260630-officer2";
+const CACHE_NAME = "ova-yanxishe-pwa-v20260630-officer4";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20260630-officer2",
-  "./script.js?v=20260630-officer2",
+  "./styles.css?v=20260630-officer4",
+  "./script.js?v=20260630-officer4",
   "./manifest.webmanifest",
   "./enso_circle_print_thin.png",
   "./oriental_woman_bg.jpg"

@@ -679,6 +679,13 @@ h3 {
   margin: 12px 0;
 }
 
+.test-quiet-note {
+  margin: 8px 0 2px;
+  color: rgba(80, 73, 63, 0.72);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
 .daily-test-options button {
   min-height: 34px;
   padding: 0 12px;
